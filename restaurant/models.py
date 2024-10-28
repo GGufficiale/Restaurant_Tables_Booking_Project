@@ -11,6 +11,7 @@ class Booking(models.Model):
     description = models.CharField(max_length=1000, verbose_name='Пожелания',
                                    help_text="Введите пожелания при бронировании",
                                    **NULLABLE)
+    time = models.TimeField(max_length=25, verbose_name='Время брони')
     photo = models.ImageField(upload_to='catalog/photo', verbose_name="Фото",
                               help_text="Загрузите скрин из ваших соцсетей для получения скидки", **NULLABLE)
     # Для работы с изображениями в Джанго надо установить пакет Pillow"""
@@ -20,9 +21,6 @@ class Booking(models.Model):
     slug = models.CharField(max_length=150, verbose_name='slug', null=True, blank=True)
     owner = models.ForeignKey(User, verbose_name='владелец товара', help_text='Укажите владельца товара', **NULLABLE,
                               on_delete=models.SET_NULL)
-
-    # Поле owner указывает на владельца прав доступа к товару и является ссылкой на модель пользователя
-    # Сразу после внесения изменений в модель создаем миграцию
 
     def __str__(self):
         return f'{self.name}: {self.description}. Цена: {self.price}'
@@ -37,3 +35,19 @@ class Booking(models.Model):
             ('edit_description', 'Can edit description'),
             ('change_category', 'Can change category'),
         ]
+
+
+class Table(models.Model):
+    number = models.IntegerField(max_length=100, verbose_name='№ стола')
+    description = models.CharField(max_length=1000, verbose_name='описание стола', **NULLABLE)
+    owner = models.ForeignKey(User, verbose_name='гость, забронировавший стол',
+                              help_text='Укажите гостя, забронировавшего стол', **NULLABLE,
+                              on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.number}: {self.description}, {self.owner}'
+
+    class Meta:
+        verbose_name = 'стол'
+        verbose_name_plural = 'столы'
+        ordering = ['name', 'description', 'owner']
