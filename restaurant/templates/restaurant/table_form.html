@@ -5,9 +5,9 @@
         <div class="col-6">
             <div class="card">
                 {% if object %}
-                    <p class="card-text">Редактирование товара</p>
+                    <p class="card-text">Поменять бронь</p>
                 {% else %}
-                    <p class="card-text">Создание товара</p>
+                    <p class="card-text">Создать бронь</p>
                 {% endif %}
                 <div class="card-body">
                     {% csrf_token %}
@@ -24,7 +24,7 @@
         </div>
         <div class="col-6">
             <div class="card">
-                <p class="card-text">Версия товара</p>
+                <p class="card-text">Версия бронирования</p>
                 <div class="card-body">
                     {{ formset.management_form }}
                     {% for form in formset.forms %}
