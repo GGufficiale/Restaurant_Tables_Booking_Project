@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, BooleanField
 
-from restaurant.models import Product, Version
+from restaurant.models import Table, Booking
 
 
 class StyleFormMixin:
@@ -16,9 +16,9 @@ class StyleFormMixin:
                 field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, ModelForm):
+class BookingForm(StyleFormMixin, ModelForm):
     class Meta:
-        model = Product
+        model = Booking
         # Строка для исключения поля. Если нужно вывести все - пишем "__all__"
         exclude = ("views_counter", 'owner')
 
@@ -39,26 +39,8 @@ class ProductForm(StyleFormMixin, ModelForm):
         return cleaned_data
 
 
-class ProductModeratorForm(StyleFormMixin, ModelForm):
+class BookingModeratorForm(StyleFormMixin, ModelForm):
     class Meta:
-        model = Product
+        model = Booking
         # Строка для исключения поля. Если нужно вывести все - пишем "__all__"
-        fields = ("description", 'category')
-
-
-class VersionForm(StyleFormMixin, ModelForm):
-    class Meta:
-        model = Version
-        # Строка для исключения поля. Если нужно вывести все - пишем "__all__"
-        fields = "__all__"
-
-    def clean(self):
-        cleaned_data = super().clean()
-        is_version_active = cleaned_data.get('is_version_active')
-        if is_version_active:
-            active_versions = Version.objects.filter(is_version_active=True)
-            if self.instance.pk:
-                active_versions = active_versions.exclude(pk=self.instance.pk)
-            if active_versions.exists():
-                raise ValidationError("Может быть только одна активная версия.")
-        return cleaned_data
+        fields = ("description", 'owner')

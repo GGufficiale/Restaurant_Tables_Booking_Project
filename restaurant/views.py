@@ -6,28 +6,28 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from pytils.translit import slugify
 
-from restaurant.forms import ProductForm, VersionForm, ProductModeratorForm
-from restaurant.models import Product, Version
-from restaurant.services import get_products_from_cache
+from restaurant.forms import BookingForm, BookingModeratorForm
+from restaurant.models import Table, Booking
+from restaurant.services import get_bookings_from_cache
 
 
-# def product_list(request):
+# def booking_list(request):
 #     """Функция принимает параметр request (инфа от пользователя на фротэнде) и возвращает ответ"""
-#     products = Product.objects.all()
-#     context = {"products": products}
-#     return render(request, 'products_list.html', context)
+#     bookings = Booking.objects.all()
+#     context = {"bookings": bookings}
+#     return render(request, 'booking_list.html', context)
 
-class ProductListView(ListView):
-    """Класс, заменяющий функцию product_list (FBV на CBV)"""
-    model = Product
+class BookingListView(ListView):
+    """Класс, заменяющий функцию booking_list (FBV на CBV)"""
+    model = Booking
 
     def get_queryset(self):
-        return get_products_from_cache()
+        return get_bookings_from_cache()
 
 
-class ProductDetailView(DetailView):
-    """Класс, заменяющий функцию products_detail (FBV на CBV)"""
-    model = Product
+class BookingDetailView(DetailView):
+    """Класс, заменяющий функцию bookings_detail (FBV на CBV)"""
+    model = Booking
 
     def get_object(self, queryset=None):
         """Метод для подсчета к-ва просмотров страницы"""
@@ -37,10 +37,10 @@ class ProductDetailView(DetailView):
         return self.object
 
 
-class ProductCreateView(LoginRequiredMixin, CreateView):
-    model = Product
-    form_class = ProductForm
-    success_url = reverse_lazy('catalog:products_list')
+class BookingCreateView(LoginRequiredMixin, CreateView):
+    model = Booking
+    form_class = BookingForm
+    success_url = reverse_lazy('restaurant:booking_list')
 
     def form_valid(self, form):
         """Метод для отправки пользователю ссылки на почту при верификации почты"""
@@ -59,10 +59,10 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     #     return super().form_valid(form)
 
 
-class ProductUpdateView(LoginRequiredMixin, UpdateView):
-    model = Product
-    form_class = ProductForm
-    success_url = reverse_lazy('catalog:products_list')
+class BookingUpdateView(LoginRequiredMixin, UpdateView):
+    model = Booking
+    form_class = BookingForm
+    success_url = reverse_lazy('restaurant:booking_list')
 
     # def form_valid(self, form):
     #     if form.is_valid():
@@ -72,46 +72,34 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     #     return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('catalog:products_detail', args=[self.kwargs.get('pk')])
+        return reverse('restaurant:booking_detail', args=[self.kwargs.get('pk')])
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
-        ProductFormSet = inlineformset_factory(Product, Version, VersionForm, extra=1)
+        BookingFormSet = inlineformset_factory(Table, Booking, BookingForm, extra=1)
         if self.request.method == 'POST':
-            context_data['formset'] = ProductFormSet(self.request.POST, instance=self.object)
+            context_data['formset'] = BookingFormSet(self.request.POST, instance=self.object)
         else:
-            context_data['formset'] = ProductFormSet(instance=self.object)
+            context_data['formset'] = BookingFormSet(instance=self.object)
         return context_data
-
-    def form_valid(self, form):
-        """Метод для добавления новых версий товара"""
-        context_data = self.get_context_data()
-        formset = context_data["formset"]
-        if form.is_valid() and formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return super().form_valid(form)
-        else:
-            return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
     def get_form_class(self):
         """Метод для работы с правами доступа"""
         user = self.request.user
         if user == self.object.owner:
-            return ProductForm
-        if user.has_perm('product.can_cancel_publication') and user.has_perm(
+            return BookingForm
+        if user.has_perm('booking.can_cancel_publication') and user.has_perm(
                 'product.can_edit_description') and user.has_perm('product.can_change_category'):
-            return ProductModeratorForm
+            return BookingModeratorForm
         raise PermissionDenied
 
 
-class ProductDeleteView(LoginRequiredMixin, DeleteView):
-    model = Product
-    success_url = reverse_lazy('catalog:products_list')
+class BookingDeleteView(LoginRequiredMixin, DeleteView):
+    model = Booking
+    success_url = reverse_lazy('restaurant:booking_list')
 
     def get_object(self, queryset=None):
-        """Метод для определения доступа к удалению только своих товаров"""
+        """Метод для определения доступа к удалению только своих бронирований"""
         self.object = super().get_object(queryset)
         if self.request.user == self.object.owner:
             self.object.save()
@@ -119,20 +107,9 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
         raise PermissionDenied
 
 
-def toggle_activity(request, pk):
-    """Функция-контроллер для изменения статуса активности товара"""
-    product_item = get_object_or_404(Product, pk=pk)
-    if product_item.is_published:
-        product_item.is_published = False
-    else:
-        product_item.is_published = True
-    product_item.save()
-    return redirect(reverse('catalog:products_list'))
-
-
 class ContactPageView(TemplateView):
     """Класс для отображения страницы с контактами"""
-    template_name = 'catalog/contact.html'
+    template_name = 'restaurant/contact.html'
 
     def post(self, request, *args, **kwargs):
         """Метод для приема инфы с фронтэнда в контактах и ее вывода в консоль"""
@@ -141,10 +118,10 @@ class ContactPageView(TemplateView):
             email = request.POST.get('email')
             message = request.POST.get('message')
             print(f'{name} ({email}): {message}')
-        return render(request, 'catalog/contact.html')
+        return render(request, 'restaurant/contact.html')
 
     def get(self, request):
-        return render(request, 'catalog/contact.html')
+        return render(request, 'restaurant/contact.html')
 
 # def contact(request):
 #     if request.method == 'POST':

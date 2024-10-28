@@ -1,24 +1,16 @@
 from django.contrib import admin
-from restaurant.models import Product, Category, Version
+from restaurant.models import Table, Booking
 
-# """Вывод продуктов"""
-# admin.site.register(Product)
-
-"""Вывод списка продуктов"""
+"""Вывод списка столов и бронирований"""
 
 
-@admin.register(Product)
+@admin.register(Table)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'price', 'category', 'is_published')
-    list_filter = ('category',)
-    search_fields = ('name', 'description',)
+    list_display = ('id', 'number', 'description', 'seats')
+    search_fields = ('number', 'seats',)
 
 
-@admin.register(Category)
+@admin.register(Booking)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name',)
-
-
-@admin.register(Version)
-class VersionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'version_name',)
+    list_display = ('id', 'name', 'description', 'time', 'owner', 'table')
+    list_filter = ('time', 'table',)

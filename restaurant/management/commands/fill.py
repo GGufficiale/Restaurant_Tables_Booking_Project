@@ -2,53 +2,53 @@
 # Создается по адресу myapp/management/commands/fill.py
 import json
 from django.core.management import BaseCommand
-from restaurant.models import Category, Product
+from restaurant.models import Table, Booking
 
 
 class Command(BaseCommand):
     @staticmethod
-    def json_read_categories():
-        """Получение данных из фикстур с категориями"""
+    def json_read_tables():
+        """Получение данных из фикстур со столами"""
         with open("restaurant.json", encoding='utf-8') as file:
             data = json.load(file)
-        return [i for i in data if i['model'] == 'restaurant.category']
+        return [i for i in data if i['model'] == 'restaurant.table']
 
     @staticmethod
-    def json_read_products():
-        """Получение данных из фикстур с продуктами"""
+    def json_read_bookings():
+        """Получение данных из фикстур с бронированиями"""
         with open("restaurant.json", encoding='utf-8') as file:
             data = json.load(file)
-        return [i for i in data if i['model'] == 'restaurant.product']
+        return [i for i in data if i['model'] == 'restaurant.booking']
 
     def handle(self, *args, **options):
-        """Удаление всех продуктов и категорий"""
-        Product.objects.all().delete()
-        Category.objects.all().delete()
+        """Удаление всех столов и бронирований"""
+        Table.objects.all().delete()
+        Booking.objects.all().delete()
 
         """Создание списков для хранения объектов"""
-        product_for_create = []
-        category_for_create = []
+        table_for_create = []
+        booking_for_create = []
 
         """Обход всех значений категорий из фикстуры для получения информации об одном объекте"""
-        for category in Command.json_read_categories():
-            category_for_create.append(
-                Category(id=category['pk'],
-                         name=category["fields"]["name"],
-                         description=category["fields"]["description"])
+        for table in Command.json_read_tables():
+            table_for_create.append(
+                Table(id=table['pk'],
+                      number=table["fields"]["number"],
+                      description=table["fields"]["description"])
             )
 
         """Создание объектов в базе"""
-        Category.objects.bulk_create(category_for_create)
+        Table.objects.bulk_create(table_for_create)
 
         """Обход всех значений продуктов из фикстуры для получения информации об одном объекте"""
-        for product in Command.json_read_products():
-            product_for_create.append(
-                Product(id=product['pk'],
-                        name=product["fields"]["name"],
-                        description=product["fields"]["description"],
-                        category=Category.objects.get(pk=product["fields"]["category"]),
-                        price=product["fields"]["price"])
+        for booking in Command.json_read_bookings():
+            booking_for_create.append(
+                Booking(id=booking['pk'],
+                        name=booking["fields"]["name"],
+                        description=booking["fields"]["description"],
+                        table=Booking.objects.get(pk=booking["fields"]["table"]),
+                        time=booking["fields"]["time"])
             )
 
         """Создание объектов в базе"""
-        Product.objects.bulk_create(product_for_create)
+        Booking.objects.bulk_create(booking_for_create)

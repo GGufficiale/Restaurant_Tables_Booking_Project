@@ -26,7 +26,7 @@ class Booking(models.Model):
     description = models.CharField(max_length=1000, verbose_name='Пожелания',
                                    help_text="Введите пожелания при бронировании",
                                    **NULLABLE)
-    time = models.TimeField(max_length=25, verbose_name='Время брони')
+    time = models.TimeField(max_length=25, verbose_name='Дата и время брони')
     photo = models.ImageField(upload_to='catalog/photo', verbose_name="Фото",
                               help_text="Загрузите скрин из ваших соцсетей для получения скидки", **NULLABLE)
     # Для работы с изображениями в Джанго надо установить пакет Pillow"""
