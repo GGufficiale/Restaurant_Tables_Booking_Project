@@ -1,4 +1,4 @@
-{% extends 'catalog/base.html' %}
+{% extends 'restaurant/base.html' %}
 {% block content%}
 <div class="container">
     <div class="row">
@@ -12,7 +12,7 @@
                     <button type="submit" class="btn btn-danger">
                         Зачистить
                     </button>
-                    <a class="btn btn-primary" href="{% url 'catalog:products_list' %}"
+                    <a class="btn btn-primary" href="{% url 'restaurant:booking_list' %}"
                        role="button">Пощадить</a>
                 </div>
             </form>

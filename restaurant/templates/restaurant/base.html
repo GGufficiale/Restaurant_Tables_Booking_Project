@@ -178,7 +178,7 @@
 
 
 <header data-bs-theme="dark">
-{% include 'catalog/includes/inc_menu.html' %}
+{% include 'restaurant/includes/inc_menu.html' %}
 </header>
 
 <main>
@@ -190,7 +190,7 @@
                 <p class="lead text-body-secondary">НАШ ПРОД НЕ ГОРИТ, А КОПТИТСЯ</p>
                 {% if user.is_authenticated %}
                 <p>
-                    <a class="btn btn-primary" href="{% url 'catalog:products_create' %}"
+                    <a class="btn btn-primary" href="{% url 'restaurant:booking_create' %}"
                                    role="button">Задеплоить столик</a>
                 </p>
                 {% endif %}

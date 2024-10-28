@@ -1,4 +1,4 @@
-{% extends 'catalog/base.html' %}
+{% extends 'restaurant/base.html' %}
 {% load my_tags %}
 <!--Подключаем файл my_tags, чтобы можно было выводить фото -->
 {% block content%}
@@ -15,7 +15,7 @@
                         <p class="card-text">Дата выпуска: {{ object.created_at }}</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a class="btn btn-primary" href="{% url 'catalog:products_list' %}"
+                                <a class="btn btn-primary" href="{% url 'restaurant:booking_list' %}"
                                    role="button">Назад</a>
                             </div>
                             <small class="text-body-secondary">При бронировании скидка 15% на коктейли в обед</small>

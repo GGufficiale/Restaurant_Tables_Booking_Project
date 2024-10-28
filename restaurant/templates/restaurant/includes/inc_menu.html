@@ -8,16 +8,16 @@
             <div class="col-sm-4 offset-md-1 py-4">
                 <h4>Навигация</h4>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'catalog:products_list' %}" class="text-white">Главная</a></li>
+                    <li><a href="{% url 'restaurant:booking_list' %}" class="text-white">Главная</a></li>
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'users:logout' %}" class="text-white">Выход</a></li>
                     {% else %}
                     <li><a href="{% url 'users:login' %}" class="text-white">Личный кабинет</a></li>
                     <li><a href="{% url 'users:register' %}" class="text-white">Регистрация</a></li>
                     {% endif %}
-                    <li><a href="{% url 'catalog:contact' %}" class="text-white">Контакты</a></li>
-                    <li><a href="{% url 'blog:blog_list' %}" class="text-white">О ресторане</a></li>
-                    <li><a href="{% url 'blog:blog_list' %}" class="text-white">Бронирование</a></li>
+                    <li><a href="{% url 'restaurant:contact' %}" class="text-white">Контакты</a></li>
+                    <li><a href="{% url 'restaurant:contact' %}" class="text-white">О ресторане</a></li>
+                    <li><a href="{% url 'restaurant:contact' %}" class="text-white">Бронирование</a></li>
                 </ul>
             </div>
         </div>
