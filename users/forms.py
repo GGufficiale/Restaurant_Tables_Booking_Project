@@ -1,5 +1,4 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.core.exceptions import ValidationError
 from restaurant.forms import StyleFormMixin
 from users.models import User
 

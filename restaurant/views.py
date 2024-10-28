@@ -29,26 +29,31 @@ class BookingDetailView(DetailView):
     """Класс, заменяющий функцию bookings_detail (FBV на CBV)"""
     model = Booking
 
-    def get_object(self, queryset=None):
-        """Метод для подсчета к-ва просмотров страницы"""
-        self.object = super().get_object()
-        self.object.views_counter += 1
-        self.object.save()
-        return self.object
-
 
 class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingForm
-    success_url = reverse_lazy('restaurant:booking_list')
+    success_url = reverse_lazy('restaurant:booking_create')
 
-    def form_valid(self, form):
-        """Метод для отправки пользователю ссылки на почту при верификации почты"""
-        product = form.save()
-        user = self.request.user
-        product.owner = user
-        product.save()
-        return super().form_valid(form)
+    # def form_valid(self, form):
+    #     booking = form.save()
+    #     booking.user = self.request.user
+    #     times_used = booking.time.all()
+    #     booked_table = Table.objects.get(pk=self.kwargs.get('pk'))
+    #     times_table = booked_table.time.all()
+    #     booked_table.time.set(times_table.difference(times_used))
+    #     booked_table.save()
+    #     booking.table = booked_table
+    #     booking.save()
+    #     return super().form_valid(form)
+
+    # def form_valid(self, form):
+    #     """Метод для отправки пользователю ссылки на почту при верификации почты"""
+    #     product = form.save()
+    #     user = self.request.user
+    #     product.owner = user
+    #     product.save()
+    #     return super().form_valid(form)
 
     # def form_valid(self, form):
     # """Метод для отображения латиницей кириллических названий товара"""
@@ -122,6 +127,40 @@ class ContactPageView(TemplateView):
 
     def get(self, request):
         return render(request, 'restaurant/contact.html')
+
+
+class ComplainPageView(TemplateView):
+    """Класс для отображения страницы с жалобами"""
+    template_name = 'restaurant/complain.html'
+
+    def post(self, request, *args, **kwargs):
+        """Метод для приема инфы с фронтэнда в жалобах и ее вывода в консоль"""
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            message = request.POST.get('message')
+            print(f'{name} ({email}): {message}')
+        return render(request, 'restaurant/complain.html')
+
+    def get(self, request):
+        return render(request, 'restaurant/complain.html')
+
+
+class InfoPageView(TemplateView):
+    """Класс для отображения страницы с информацией о ресторане"""
+    template_name = 'restaurant/info.html'
+
+    def post(self, request, *args, **kwargs):
+        """Метод для приема инфы с фронтэнда в информации и ее вывода в консоль"""
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            message = request.POST.get('message')
+            print(f'{name} ({email}): {message}')
+        return render(request, 'restaurant/info.html')
+
+    def get(self, request):
+        return render(request, 'restaurant/info.html')
 
 # def contact(request):
 #     if request.method == 'POST':
