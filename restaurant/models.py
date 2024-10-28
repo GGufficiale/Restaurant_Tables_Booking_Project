@@ -7,10 +7,10 @@ NULLABLE = {'blank': True, 'null': True}  # форма, если парамет�
 
 
 class Table(models.Model):
-    number = models.IntegerField(max_length=100, verbose_name='№ стола', help_text='Укажите № стола')
+    number = models.IntegerField(verbose_name='№ стола', help_text='Укажите № стола')
     description = models.CharField(max_length=1000, verbose_name='Описание стола', help_text='Укажите тип стола',
                                    **NULLABLE)
-    seats = models.IntegerField(max_length=20, verbose_name='К-во мест', help_text='Укажите к-во мест', **NULLABLE)
+    seats = models.IntegerField(verbose_name='К-во мест', help_text='Укажите к-во мест', **NULLABLE)
 
     def __str__(self):
         return f'{self.number}: {self.description}, {self.seats}'
