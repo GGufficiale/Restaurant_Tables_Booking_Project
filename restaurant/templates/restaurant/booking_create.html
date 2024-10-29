@@ -5,9 +5,9 @@
         <div class="col-6">
             <div class="card">
                 {% if object %}
-                    <p class="card-text">Поменять бронь</p>
+                <p class="card-text">Поменять бронь</p>
                 {% else %}
-                    <p class="card-text">Создать бронь</p>
+                <p class="card-text">Создать бронь</p>
                 {% endif %}
                 <div class="card-body">
                     {% csrf_token %}
@@ -15,11 +15,15 @@
                 </div>
                 <button type="submit" class="btn btn-primary">
                     {% if object %}
-                        Сохранить
+                    Сохранить
                     {% else %}
-                        Создать
+                    Создать
                     {% endif %}
                 </button>
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="{% url 'restaurant:info' %}"
+                       role="button">Назад</a>
+                </div>
             </div>
         </div>
     </form>

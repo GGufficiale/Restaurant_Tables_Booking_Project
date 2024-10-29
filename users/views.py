@@ -1,5 +1,6 @@
 import secrets
 
+from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
@@ -33,3 +34,8 @@ def email_verification(request, token):
     user.is_active = True
     user.save()
     return redirect(reverse("users:login"))
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("/")

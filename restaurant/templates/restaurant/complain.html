@@ -6,10 +6,17 @@
             <h2> Упал код? Принесли холодный суп? Напишите нам </h2>
             <form method="post">
                 {% csrf_token %}
+                Твой айпи и ФИО
                 <input class="form-control mt-2" name="name"/>
+                Мэйл, сэр!
                 <input class="form-control m-2" name="email"/>
+                Жалуемся тут :)
                 <textarea class="form-control m-2" name="message"></textarea>
                 <button type="submit" class="m-2 btn btn-primary form-control">Нажаловаться на нас</button>
+                <div class="btn-group">
+                    <a class="btn btn-primary" href="{% url 'restaurant:info' %}"
+                       role="button">Настучал? Жми сюда, выход тут</a>
+                </div>
             </form>
         </div>
     </div>

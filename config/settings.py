@@ -141,6 +141,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = (
+    # Здесь можно добавить пути к статическим файлам, если они располагаются вне приложений
+    BASE_DIR / 'static',
+)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
