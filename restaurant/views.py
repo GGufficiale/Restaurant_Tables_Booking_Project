@@ -33,6 +33,7 @@ class BookingDetailView(DetailView):
 class BookingCreateView(LoginRequiredMixin, CreateView):
     model = Booking
     form_class = BookingForm
+    template_name = 'restaurant/booking_create.html'
     success_url = reverse_lazy('restaurant:booking_create')
 
     # def form_valid(self, form):
