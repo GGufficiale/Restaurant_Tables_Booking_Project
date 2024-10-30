@@ -105,15 +105,16 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
 
 class BookingDeleteView(LoginRequiredMixin, DeleteView):
     model = Booking
+    template_name = 'restaurant/booking_confirm_delete.html'
     success_url = reverse_lazy('restaurant:booking_list')
 
-    def get_object(self, queryset=None):
-        """Метод для определения доступа к удалению только своих бронирований"""
-        self.object = super().get_object(queryset)
-        if self.request.user == self.object.owner:
-            self.object.save()
-            return self.object
-        raise PermissionDenied
+    # def get_object(self, queryset=None):
+    #     """Метод для определения доступа к удалению только своих бронирований"""
+    #     self.object = super().get_object(queryset)
+    #     if self.request.user == self.object.owner:
+    #         self.object.save()
+    #         return self.object
+    #     raise PermissionDenied
 
 
 class ContactPageView(TemplateView):

@@ -18,6 +18,6 @@ urlpatterns = [
     path('restaurant/list/', BookingListView.as_view(), name='booking_list'),
     path('restaurant/create/', BookingCreateView.as_view(), name='booking_create'),
     path('restaurant/<int:pk>/update/', BookingUpdateView.as_view(), name='booking_update'),
-    path('restaurant/<int:pk>/delete/', BookingDeleteView.as_view(), name='booking_delete'),
+    path('restaurant/<int:pk>/delete/', BookingDeleteView.as_view(), name='booking_confirm_delete'),
     # path('activity/<int:pk>/', toggle_activity, name='toggle_activity'),
 ]

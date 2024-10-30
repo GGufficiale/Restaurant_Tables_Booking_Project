@@ -18,6 +18,9 @@
                     <li><a href="{% url 'restaurant:contact' %}" class="text-white">Контакты</a></li>
                     <li><a href="{% url 'restaurant:info' %}" class="text-white">О ресторане</a></li>
                     <li><a href="{% url 'restaurant:booking_create' %}" class="text-white">Бронирование</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a href="{% url 'restaurant:booking_list' %}" class="text-white">Список бронирований</a></li>
+                    {% endif %}
                     <li><a href="{% url 'restaurant:complain' %}" class="text-white">Челобитная</a></li>
                 </ul>
             </div>
