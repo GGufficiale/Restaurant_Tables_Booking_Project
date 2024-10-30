@@ -3,29 +3,29 @@
 <!--Подключаем файл my_tags, чтобы можно было выводить фото -->
 {% block content%}
 <div class="album py-5 bg-body-tertiary">
-    <div class="container">
+    <div class="container text-center">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {% for booking in object_list %}
             <!-- Цикл, с помощью которого мы отображаем столько карточек с товарами, сколько имеем товаров в базе-->
-            <div class="col">
+            <div class="col text-center">
                 <div class="card shadow-sm">
                     <img src="{{ booking.photo|media_filter }}">
                     <div class="card-body">
-                        <p class="card-text">{{ booking.name }}</p>
-                        <p class="card-text">Цена: {{ booking.time }}</p>
-                        <p class="card-text">{{ booking.description|truncatechars:100 }}</p>
+                        <p class="card-text">Имя/имэйл гостя: {{ booking.name }}</p>
+                        <p class="card-text">Дата: {{ booking.datetime_booking }}</p>
+                        <p class="card-text">Пожелания по бронированию: {{ booking.description|truncatechars:100 }}</p>
                         <!--Этой строкой для единообразия выводимых карточек отображаемое описание ограничивается 100 символами.-->
                         <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
+                            <div class="btn-group text-center">
                                 <a class="btn btn-primary" href="{% url 'restaurant:booking_update' booking.pk %}"
                                    role="button">Редактировать</a>
                                 <a class="btn btn-primary" href="{% url 'restaurant:booking_detail' booking.pk %}"
                                    role="button">Посмотреть</a>
-                                <a class="btn btn-primary" href="{% url 'restaurant:booking_delete' booking.pk %}"
+                                <a class="btn btn-danger" href="{% url 'restaurant:booking_delete' booking.pk %}"
                                    role="button">Удалить</a>
                             </div>
-                            <small class="text-body-secondary">При бронировании даем скидку 15%</small>
                         </div>
+                        <small class="text-body-secondary text-center">Бронь за 5 дней = скидка 15% на коктейли в обед</small>
                     </div>
                 </div>
             </div>
