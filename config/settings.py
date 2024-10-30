@@ -180,3 +180,5 @@ if CACHE_ENABLED:
         'LOCATION': os.getenv("LOCATION")}
     }
     # В случае защиты аутентификации LOCATION может быть описан как 'redis://username:password@127.0.0.1:6379'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
