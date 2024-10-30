@@ -17,9 +17,15 @@ from restaurant.services import get_bookings_from_cache
 #     context = {"bookings": bookings}
 #     return render(request, 'booking_list.html', context)
 
-class BookingListView(ListView):
+class HomeView(TemplateView):
+    """Класс, отображающий базовую страницу"""
+    template_name = 'restaurant/index.html'
+
+
+class BookingListView(LoginRequiredMixin, ListView):
     """Класс, заменяющий функцию booking_list (FBV на CBV)"""
     model = Booking
+    template_name = 'restaurant/booking_list.html'
 
     def get_queryset(self):
         return get_bookings_from_cache()
@@ -30,11 +36,16 @@ class BookingDetailView(DetailView):
     model = Booking
 
 
-class BookingCreateView(LoginRequiredMixin, CreateView):
+class BookingCreateView(CreateView):
     model = Booking
     form_class = BookingForm
     template_name = 'restaurant/booking_create.html'
-    success_url = reverse_lazy('restaurant:booking_create')
+
+    def get_success_url(self):
+        if self.request.user.is_authenticated:
+            return reverse('restaurant:booking_list')
+        else:
+            return reverse('restaurant:index')
 
     # def form_valid(self, form):
     #     booking = form.save()
@@ -68,6 +79,7 @@ class BookingCreateView(LoginRequiredMixin, CreateView):
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
     model = Booking
     form_class = BookingForm
+    template_name = 'restaurant/booking_create.html'
     success_url = reverse_lazy('restaurant:booking_list')
 
     # def form_valid(self, form):
@@ -79,15 +91,6 @@ class BookingUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse('restaurant:booking_detail', args=[self.kwargs.get('pk')])
-
-    def get_context_data(self, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        BookingFormSet = inlineformset_factory(Table, Booking, BookingForm, extra=1)
-        if self.request.method == 'POST':
-            context_data['formset'] = BookingFormSet(self.request.POST, instance=self.object)
-        else:
-            context_data['formset'] = BookingFormSet(instance=self.object)
-        return context_data
 
     def get_form_class(self):
         """Метод для работы с правами доступа"""

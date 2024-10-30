@@ -1,7 +1,7 @@
 {% extends 'restaurant/base.html' %}
 {% block content %}
 <div class="col-md-4">
-    <div class="card mb-4 box-shadow">
+    <div class="card mb-4 box-shadow text-center">
         <div class="card-body">
             <p class="card-text">
                 Мы в ДС (МСК):
@@ -11,7 +11,7 @@
             </p>
         </div>
         <div class="btn-group">
-            <a class="btn btn-primary" href="{% url 'restaurant:info' %}"
+            <a class="btn btn-primary" href="{% url 'restaurant:index' %}"
                role="button">Назад</a>
         </div>
     </div>

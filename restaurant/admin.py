@@ -5,12 +5,12 @@ from restaurant.models import Table, Booking
 
 
 @admin.register(Table)
-class ProductAdmin(admin.ModelAdmin):
+class TableAdmin(admin.ModelAdmin):
     list_display = ('id', 'number', 'description', 'seats')
     search_fields = ('number', 'seats',)
 
 
 @admin.register(Booking)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'description', 'time', 'owner', 'table')
-    list_filter = ('time', 'table',)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'description', 'datetime_booking', 'owner', 'table')
+    list_filter = ('datetime_booking', 'table',)

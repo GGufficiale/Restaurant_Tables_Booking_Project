@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, BooleanField
+from django.forms import ModelForm, BooleanField, DateInput, DateTimeInput
 
 from restaurant.models import Table, Booking
 
@@ -21,6 +21,14 @@ class BookingForm(StyleFormMixin, ModelForm):
         model = Booking
         # Строка для исключения поля. Если нужно вывести все - пишем "__all__"
         exclude = ("views_counter", 'owner')
+        widgets = {
+            'datetime_booking': DateTimeInput(
+                format=('%Y-%m-%d'),
+                attrs={'class': 'form-control',
+                       'placeholder': 'Select a date and time',
+                       'type': 'datetime'
+                       }),
+        }
 
     forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
 
