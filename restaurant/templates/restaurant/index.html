@@ -5,11 +5,16 @@
     <img src="{% static 'images/smokedcoder1.jpg' %}" class="d-block w-100" alt="Photo">
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto">
-            <h1 class="fw-light"> Ресторан КОПЧЕНЫЙ ПРОГРАММИСТ </h1>
+            <h1 class="fw-light"> КОПЧЕНЫЙ ПРОГРАММИСТ </h1>
             <p class="lead text-body-secondary">НАШ ПРОД НЕ ГОРИТ, А ДЫМИТСЯ</p>
+            <p class="lead text-body-secondary">кухня уровня assembler</p>
             <p>
                 <a class="btn btn-primary" href="{% url 'restaurant:booking_create' %}"
                    role="button">Задеплоить столик</a>
+            </p>
+            <p>
+                <a class="btn btn-primary" href="{% url 'restaurant:menu' %}"
+                   role="button">Меню</a>
             </p>
         </div>
     </div>

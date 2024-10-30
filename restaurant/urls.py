@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 from restaurant.views import BookingListView, BookingDetailView, BookingCreateView, BookingUpdateView, \
-    BookingDeleteView, ContactPageView, ComplainPageView, InfoPageView, HomeView
+    BookingDeleteView, ContactPageView, ComplainPageView, InfoPageView, HomeView, MenuPageView
 from restaurant.apps import RestaurantConfig
 
 app_name = RestaurantConfig.name
@@ -10,6 +10,7 @@ urlpatterns = [
     path('', HomeView.as_view(), name='index'),
     # метод для отображения отдельной страницы с товаром (по одному товару)
     path('restaurant/contact/', ContactPageView.as_view(), name='contact'),
+    path('restaurant/menu/', MenuPageView.as_view(), name='menu'),
     path('restaurant/complain/', ComplainPageView.as_view(), name='complain'),
     path('restaurant/info/', InfoPageView.as_view(), name='info'),
     # В декоратор кеширования cache_page передается время его жизни (60 сек) и ссылка на контроллер (contact).

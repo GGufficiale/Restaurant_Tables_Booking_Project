@@ -155,17 +155,16 @@ class InfoPageView(TemplateView):
     """Класс для отображения страницы с информацией о ресторане"""
     template_name = 'restaurant/info.html'
 
-    def post(self, request, *args, **kwargs):
-        """Метод для приема инфы с фронтэнда в информации и ее вывода в консоль"""
-        if request.method == 'POST':
-            name = request.POST.get('name')
-            email = request.POST.get('email')
-            message = request.POST.get('message')
-            print(f'{name} ({email}): {message}')
-        return render(request, 'restaurant/info.html')
-
     def get(self, request):
         return render(request, 'restaurant/info.html')
+
+
+class MenuPageView(TemplateView):
+    """Класс для отображения страницы с информацией о ресторане"""
+    template_name = 'restaurant/menu.html'
+
+    def get(self, request):
+        return render(request, 'restaurant/menu.html')
 
 # def contact(request):
 #     if request.method == 'POST':
