@@ -22,11 +22,11 @@ class BookingForm(StyleFormMixin, ModelForm):
         # Строка для исключения поля. Если нужно вывести все - пишем "__all__"
         exclude = ("views_counter", 'owner')
         widgets = {
-            'datetime_booking': DateTimeInput(
+            'datetime_booking': DateInput(
                 format=('%Y-%m-%d'),
                 attrs={'class': 'form-control',
                        'placeholder': 'Select a date and time',
-                       'type': 'datetime'
+                       'type': 'date'
                        }),
         }
 
