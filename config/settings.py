@@ -156,13 +156,12 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # Механизм редиректа пользователя на главную страницу после регистрации и выхода из личного кабинета
 LOGIN_URL = reverse_lazy('users:login')
-# Путь до страницы авторизации, чтобы незареганный юзер не мог посмотреть на товар детально
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL")
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL')
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
@@ -181,4 +180,4 @@ if CACHE_ENABLED:
     }
     # В случае защиты аутентификации LOCATION может быть описан как 'redis://username:password@127.0.0.1:6379'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

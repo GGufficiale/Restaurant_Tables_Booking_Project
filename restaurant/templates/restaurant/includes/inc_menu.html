@@ -13,8 +13,8 @@
                     {% if user.is_authenticated %}
                     <li><a href="{% url 'users:logout' %}" class="text-white">Выход</a></li>
                     {% else %}
-                    <li><a href="{% url 'users:login' %}" class="text-white">Админ? Иди сюда</a></li>
-                    <li><a href="{% url 'users:register' %}" class="text-white">Гость? ЛК здесь</a></li>
+                    <li><a href="{% url 'users:login' %}" class="text-white">Личный кабинет</a></li>
+                    <li><a href="{% url 'users:register' %}" class="text-white">Регистрация</a></li>
                     {% endif %}
                     <li><a href="{% url 'restaurant:contact' %}" class="text-white">Контакты</a></li>
                     <li><a href="{% url 'restaurant:info' %}" class="text-white">О ресторане</a></li>

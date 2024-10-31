@@ -34,6 +34,8 @@ class Booking(models.Model):
                               on_delete=models.SET_NULL)
     table = models.ForeignKey(Table, verbose_name='Стол', help_text='Укажите № стола', **NULLABLE,
                               on_delete=models.SET_NULL)
+    is_active = models.BooleanField(verbose_name='Активность брони', editable=False, **NULLABLE,
+                                    default=False)
 
     def __str__(self):
         return f'{self.name}: {self.description}. Время:{self.datetime_booking}. Стол: {self.table}'

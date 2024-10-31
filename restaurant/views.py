@@ -1,11 +1,15 @@
+import secrets
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
 from django.forms import inlineformset_factory
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from pytils.translit import slugify
 
+from config.settings import EMAIL_HOST_USER
 from restaurant.forms import BookingForm, BookingModeratorForm
 from restaurant.models import Table, Booking
 from restaurant.services import get_bookings_from_cache
@@ -28,7 +32,7 @@ class BookingListView(LoginRequiredMixin, ListView):
     template_name = 'restaurant/booking_list.html'
 
     def get_queryset(self):
-        return get_bookings_from_cache()
+        return Booking.objects.filter(owner=self.request.user)
 
 
 class BookingDetailView(DetailView):
@@ -59,13 +63,19 @@ class BookingCreateView(CreateView):
     #     booking.save()
     #     return super().form_valid(form)
 
-    # def form_valid(self, form):
-    #     """Метод для отправки пользователю ссылки на почту при верификации почты"""
-    #     product = form.save()
-    #     user = self.request.user
-    #     product.owner = user
-    #     product.save()
-    #     return super().form_valid(form)
+    def form_valid(self, form):
+        """Метод для отправки пользователю ссылки на почту при верификации почты"""
+        booking = form.save()
+        user = self.request.user
+        booking.owner = user
+        booking.save()
+        host = self.request.get_host()
+        token = secrets.token_hex(16)
+        user.token = token
+        url = f'http://{host}/users/email-confirm/{token}/'
+        send_mail(subject='Подтверждение почты', message=f'Перейдите по ссылке для подтверждения почты {url}',
+                  from_email=EMAIL_HOST_USER, recipient_list=[user.email])
+        return super().form_valid(form)
 
     # def form_valid(self, form):
     # """Метод для отображения латиницей кириллических названий товара"""
