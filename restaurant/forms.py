@@ -23,14 +23,15 @@ class BookingForm(StyleFormMixin, ModelForm):
         exclude = ("views_counter", 'owner')
         widgets = {
             'datetime_booking': DateTimeInput(
-                format=('dd.mm.yyyy HH:ii'),
+                format='%Y-%m-%dT%H:%M',  # формат для datetime-local
                 attrs={'class': 'form-control',
                        'placeholder': 'Select a date and time',
-                       'type': 'date'
+                       'type': 'datetime-local'
                        }),
         }
 
-    forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция", "радар"]
+        forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция",
+                           "радар"]
 
     def clean_name(self):
         cleaned_data = self.cleaned_data['name']
