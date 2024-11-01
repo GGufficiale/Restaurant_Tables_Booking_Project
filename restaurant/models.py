@@ -2,7 +2,6 @@ from django.db import models
 
 from users.models import User
 
-"""Создание модели для БД с объектами каталога"""
 NULLABLE = {'blank': True, 'null': True}  # форма, если параметр необязателен
 
 
@@ -24,8 +23,7 @@ class Table(models.Model):
 class Booking(models.Model):
     name = models.CharField(max_length=100, verbose_name='Имя гостя', help_text="Введите имя или имэйл")
     description = models.CharField(max_length=1000, verbose_name='Пожелания',
-                                   help_text="Введите пожелания при бронировании",
-                                   **NULLABLE)
+                                   help_text="Введите пожелания при бронировании", **NULLABLE)
     datetime_booking = models.DateTimeField(max_length=25, verbose_name='Дата и время брони', **NULLABLE)
     photo = models.ImageField(upload_to='catalog/photo', verbose_name="Фото",
                               help_text="Загрузите скрин из ваших соцсетей для получения скидки", **NULLABLE)

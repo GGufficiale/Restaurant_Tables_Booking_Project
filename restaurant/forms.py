@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, BooleanField, DateInput, DateTimeInput
-from datetime import time, datetime
+from django.forms import ModelForm, BooleanField, DateTimeInput
 from restaurant.models import Table, Booking
 
 
@@ -44,13 +43,11 @@ class BookingForm(StyleFormMixin, ModelForm):
     forbidden_words = ["казино", "криптовалюта", "крипта", "биржа", "дешево", "бесплатно", "обман", "полиция",
                        "радар"]
 
-    def clean_availability_check(self):
-        date_to_check = self.cleaned_data['datetime_booking']
-        exists = Booking.objects.filter(datetime_booking=date_to_check).exists()
-        if exists:
-            raise ValidationError("Данная дата уже существует в базе данных.")
-        else:
-            raise ValidationError("Данной даты нет в базе данных")
+    # def clean_availability_check(self):
+    #     date_to_check = self.cleaned_data['datetime_booking']
+    #     exists = Booking.objects.filter(datetime_booking=date_to_check).exists()
+    #     if exists:
+    #         raise ValidationError("Данная дата уже существует в базе данных.")
 
     def clean_name(self):
         cleaned_data = self.cleaned_data['name']

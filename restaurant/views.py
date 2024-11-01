@@ -1,25 +1,18 @@
 import secrets
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.mail import send_mail
 from django.forms import inlineformset_factory
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from pytils.translit import slugify
 
 from config.settings import EMAIL_HOST_USER
 from restaurant.forms import BookingForm, BookingModeratorForm
 from restaurant.models import Table, Booking
-from restaurant.services import get_bookings_from_cache
 
-
-# def booking_list(request):
-#     """Функция принимает параметр request (инфа от пользователя на фротэнде) и возвращает ответ"""
-#     bookings = Booking.objects.all()
-#     context = {"bookings": bookings}
-#     return render(request, 'booking_list.html', context)
 
 class HomeView(TemplateView):
     """Класс, отображающий базовую страницу"""
@@ -77,27 +70,12 @@ class BookingCreateView(CreateView):
                   from_email=EMAIL_HOST_USER, recipient_list=[user.email])
         return super().form_valid(form)
 
-    # def form_valid(self, form):
-    # """Метод для отображения латиницей кириллических названий товара"""
-    #     if form.is_valid():
-    #         new_mat = form.save()
-    #         new_mat.slug = slugify(new_mat.name)
-    #         new_mat.save()
-    #     return super().form_valid(form)
-
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):
     model = Booking
     form_class = BookingForm
     template_name = 'restaurant/booking_create.html'
     success_url = reverse_lazy('restaurant:booking_list')
-
-    # def form_valid(self, form):
-    #     if form.is_valid():
-    #         new_mat = form.save()
-    #         new_mat.slug = slugify(new_mat.name)
-    #         new_mat.save()
-    #     return super().form_valid(form)
 
     def get_success_url(self):
         return reverse('restaurant:booking_detail', args=[self.kwargs.get('pk')])
@@ -117,14 +95,6 @@ class BookingDeleteView(LoginRequiredMixin, DeleteView):
     model = Booking
     template_name = 'restaurant/booking_confirm_delete.html'
     success_url = reverse_lazy('restaurant:booking_list')
-
-    # def get_object(self, queryset=None):
-    #     """Метод для определения доступа к удалению только своих бронирований"""
-    #     self.object = super().get_object(queryset)
-    #     if self.request.user == self.object.owner:
-    #         self.object.save()
-    #         return self.object
-    #     raise PermissionDenied
 
 
 class ContactPageView(TemplateView):
@@ -176,45 +146,16 @@ class MenuPageView(TemplateView):
     def get(self, request):
         return render(request, 'restaurant/menu.html')
 
-
-# def contact(request):
-#     if request.method == 'POST':
-#         """Метод для приема инфы с фронтэнда и ее вывода в консоль"""
-#         name = request.POST.get('name')
-#         email = request.POST.get('email')
-#         message = request.POST.get('message')
-#         print(f'{name} ({email}): {message}')
-#     context = {'title': 'Контакты'}
-#     return render(request, 'catalog/contact.html', context)
-
-# def products_detail(request, pk):
-#     """Метод для вывода товара по одному через его ID (primary key=pk)"""
-#     product = get_object_or_404(Product, pk=pk)
-#     context = {"products": product}
-#     return render(request, 'product_detail.html', context)
-
 # def index(request):
-#     """Функция принимает параметр request (инфа от пользователя на фротэнде) и возвращает ответ"""
 #     if request.method == "POST":
-#         """В request хранится информация о методе, который отправлял пользователь"""
-#         name = request.POST.get('name')
-#         """И передается информация, которую заполнил пользователь"""
-#         email = request.POST.get('email')
-#         message = request.POST.get('message')
-#         print(f'{name} ({email}): {message}')
-#     return render(request, 'catalog/index.html')
-
-
-def index(request):
-    if request.method == "POST":
-        form = BookingForm(request.POST)
-        if form.is_valid():
-            print(form)
-            form.save()
-            return render(request, 'restaurant/booking_list.html')
-        else:
-            print("Ошибка в форме:", form.errors)  # Отладка ошибок формы
-            return render(request, 'restaurant/booking_list.html', {'form': form})
-    elif request.method == "GET":
-        form = BookingForm()
-        return render(request, 'restaurant/booking_list.html', {'form': form})
+#         form = BookingForm(request.POST)
+#         if form.is_valid():
+#             print(form)
+#             form.save()
+#             return render(request, 'restaurant/booking_list.html')
+#         else:
+#             print("Ошибка в форме:", form.errors)  # Отладка ошибок формы
+#             return render(request, 'restaurant/booking_list.html', {'form': form})
+#     elif request.method == "GET":
+#         form = BookingForm()
+#         return render(request, 'restaurant/booking_list.html', {'form': form})
