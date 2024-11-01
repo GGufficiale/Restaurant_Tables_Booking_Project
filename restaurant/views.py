@@ -176,6 +176,7 @@ class MenuPageView(TemplateView):
     def get(self, request):
         return render(request, 'restaurant/menu.html')
 
+
 # def contact(request):
 #     if request.method == 'POST':
 #         """Метод для приема инфы с фронтэнда и ее вывода в консоль"""
@@ -202,3 +203,18 @@ class MenuPageView(TemplateView):
 #         message = request.POST.get('message')
 #         print(f'{name} ({email}): {message}')
 #     return render(request, 'catalog/index.html')
+
+
+def index(request):
+    if request.method == "POST":
+        form = BookingForm(request.POST)
+        if form.is_valid():
+            print(form)
+            form.save()
+            return render(request, 'restaurant/booking_list.html')
+        else:
+            print("Ошибка в форме:", form.errors)  # Отладка ошибок формы
+            return render(request, 'restaurant/booking_list.html', {'form': form})
+    elif request.method == "GET":
+        form = BookingForm()
+        return render(request, 'restaurant/booking_list.html', {'form': form})

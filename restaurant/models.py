@@ -38,6 +38,7 @@ class Booking(models.Model):
                                     default=False)
 
     def __str__(self):
+        print(f'{self.name}: {self.description}. Время:{self.datetime_booking}. Стол: {self.table}')
         return f'{self.name}: {self.description}. Время:{self.datetime_booking}. Стол: {self.table}'
 
     class Meta:
