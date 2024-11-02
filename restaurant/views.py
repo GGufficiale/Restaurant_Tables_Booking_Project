@@ -7,11 +7,13 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.utils.functional import SimpleLazyObject
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 from config.settings import EMAIL_HOST_USER
 from restaurant.forms import BookingForm, BookingModeratorForm
 from restaurant.models import Table, Booking
+from users.models import User
 
 
 class HomeView(TemplateView):
@@ -59,16 +61,24 @@ class BookingCreateView(CreateView):
     def form_valid(self, form):
         """Метод для отправки пользователю ссылки на почту при верификации почты"""
         booking = form.save()
-        user = self.request.user
-        booking.owner = user
+        user = get_object_or_404(User, pk=self.request.user.pk)
+        if user:
+            booking.owner = user
+            booking.is_active = False
+            host = self.request.get_host()
+            url = f'http://{host}/restaurant/booking-confirm/{booking.pk}/'
+            send_mail(subject='Подтверждение бронирования',
+                      message=f'Перейдите по ссылке для подтверждения бронирования {url}',
+                      from_email=EMAIL_HOST_USER, recipient_list=[user.email])
         booking.save()
-        host = self.request.get_host()
-        token = secrets.token_hex(16)
-        user.token = token
-        url = f'http://{host}/users/email-confirm/{token}/'
-        send_mail(subject='Подтверждение почты', message=f'Перейдите по ссылке для подтверждения почты {url}',
-                  from_email=EMAIL_HOST_USER, recipient_list=[user.email])
         return super().form_valid(form)
+
+
+def booking_confirm(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+    booking.is_active = True
+    booking.save()
+    return redirect(reverse('restaurant:booking_list'))
 
 
 class BookingUpdateView(LoginRequiredMixin, UpdateView):

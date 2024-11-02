@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 from restaurant.views import BookingListView, BookingDetailView, BookingCreateView, BookingUpdateView, \
-    BookingDeleteView, ContactPageView, ComplainPageView, InfoPageView, HomeView, MenuPageView
+    BookingDeleteView, ContactPageView, ComplainPageView, InfoPageView, HomeView, MenuPageView, booking_confirm
 from restaurant.apps import RestaurantConfig
 
 app_name = RestaurantConfig.name
@@ -17,6 +17,7 @@ urlpatterns = [
     # Это позволяет кешировать весь контроллер
     path('restaurant/<int:pk>/', cache_page(60)(BookingDetailView.as_view()), name='booking_detail'),
     path('restaurant/list/', BookingListView.as_view(), name='booking_list'),
+    path('restaurant/booking-confirm/<int:pk>/', booking_confirm, name='booking_confirm'),
     path('restaurant/create/', BookingCreateView.as_view(), name='booking_create'),
     path('restaurant/<int:pk>/update/', BookingUpdateView.as_view(), name='booking_update'),
     path('restaurant/<int:pk>/delete/', BookingDeleteView.as_view(), name='booking_confirm_delete'),
