@@ -61,10 +61,10 @@ class BookingCreateView(CreateView):
     def form_valid(self, form):
         """Метод для отправки пользователю ссылки на почту при верификации почты"""
         booking = form.save()
-        user = get_object_or_404(User, pk=self.request.user.pk)
-        if user:
+        booking.is_active = False
+        if self.request.user.is_authenticated:
+            user = self.request.user
             booking.owner = user
-            booking.is_active = False
             host = self.request.get_host()
             url = f'http://{host}/restaurant/booking-confirm/{booking.pk}/'
             send_mail(subject='Подтверждение бронирования',

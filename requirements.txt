@@ -10,7 +10,7 @@ click-plugins==1.1.1
 click-repl==0.3.0
 colorama==0.4.6
 coreapi==2.3.3
-coreschema==0.0.4
+coreschema
 coverage==7.6.1
 cron-descriptor==1.4.5
 Django==5.1.2

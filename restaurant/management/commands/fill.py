@@ -46,8 +46,8 @@ class Command(BaseCommand):
                 Booking(id=booking['pk'],
                         name=booking["fields"]["name"],
                         description=booking["fields"]["description"],
-                        table=Booking.objects.get(pk=booking["fields"]["table"]),
-                        time=booking["fields"]["time"])
+                        table=Table.objects.get(pk=booking["fields"]["table"]),
+                        time=booking["fields"]["datetime_booking"])
             )
 
         """Создание объектов в базе"""
